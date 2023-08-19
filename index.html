@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-Pharmacy</title>
+    <script>
+        function saveData() {
+            var customerName = document.getElementById("customerName").value;
+            var medicines = document.getElementById("medicines").value;
+
+            // Create the XML data
+            var xmlString = "<order>" +
+                "<customerName>" + customerName + "</customerName>" +
+                "<medicines>" + medicines + "</medicines>" +
+                "</order>";
+
+            // Create a Blob with the XML data
+            var xmlBlob = new Blob([xmlString], { type: "text/xml" });
+            var xmlUrl = URL.createObjectURL(xmlBlob);
+
+            // Create an anchor element and simulate a click to download XML
+            var a = document.createElement("a");
+            a.href = xmlUrl;
+            a.download = "order.xml";
+            a.click();
+
+            // Create the content for the new HTML table file
+            var tableContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${customerName}'s Order Details</title>
+                </head>
+                <body>
+                    <h1>${customerName}'s Order Details</h1>
+                    <table border="1">
+                        <tr>
+                            <th>Customer Name</th>
+                            <td>${customerName}</td>
+                        </tr>
+                        <tr>
+                            <th>Medicines Required</th>
+                            <td>${medicines}</td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            // Create a Blob with the table content
+            var tableBlob = new Blob([tableContent], { type: "text/html" });
+            
+            // Create an anchor element to download the HTML table content
+            var tableA = document.createElement("a");
+            tableA.href = URL.createObjectURL(tableBlob);
+            tableA.download = customerName + "_order_details.html";
+            tableA.click();
+        }
+    </script>
+</head>
+<body>
+    <h1>E-Pharmacy</h1>
+    <form>
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName"><br><br>
+        <label for="medicines">Medicines Required:</label>
+        <textarea id="medicines" name="medicines"></textarea><br><br>
+        <button type="button" onclick="saveData()">Place Order</button>
+    </form>
+</body>
+</html>
